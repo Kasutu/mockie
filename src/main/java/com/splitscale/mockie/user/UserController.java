@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,11 +39,11 @@ public class UserController {
 
   @ResponseBody
   @GetMapping(path = "/get")
-  public ResponseEntity<UserDisplayable> getUser(@RequestHeader Map<String, String> body) {
+  public ResponseEntity<UserDisplayable> getUser(@RequestParam Map<String, String> param) {
 
     UserDisplayable user = new UserDisplayable(3423, "stevenBallaret");
 
-    String username = body.get("username");
+    String username = param.get("username");
 
     if (username.equals(user.username)) {
       return new ResponseEntity<UserDisplayable>(user, HttpStatus.OK);
