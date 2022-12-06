@@ -3,8 +3,10 @@ package com.splitscale.mockie.user;
 import java.util.Map;
 import java.util.Random;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,20 +25,26 @@ public class UserController {
 
   @ResponseBody
   @PostMapping(path = "/create")
-  public ResponseEntity<User> createUser(@RequestBody Map<String, String> body) {
-
-    User user = new User();
+  public ResponseEntity<UserDisplayable> createUser(@RequestBody Map<String, String> body) {
 
     long low = 0;
     long high = 1000;
     Random r = new Random();
     long result = r.nextLong(high - low) + low;
 
-    user.setId(result);
-    user.setUsername(body.get("username"));
-    user.setPassword(body.get("password"));
+    String username = body.get("username");
+    String password = body.get("password");
 
-    return new ResponseEntity<User>(user, HttpStatus.OK);
+    if (username == null || password == null) {
+      UserDisplayable user = new UserDisplayable(result, username);
+
+      MultiValueMap<String, String> headers = new HttpHeaders();
+      headers.add("session", "ab8egt8qt73wer9wyej938r87");
+
+      return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
+    }
+
+    return new ResponseEntity<UserDisplayable>(HttpStatus.BAD_REQUEST);
   }
 
   @ResponseBody
