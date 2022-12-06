@@ -42,7 +42,7 @@ public class UserController {
     UserDisplayable user = new UserDisplayable(result, username);
 
     MultiValueMap<String, String> headers = new HttpHeaders();
-    headers.add("session", "ab8egt8qt73wer9wyej938r87");
+    headers.set("session", "ab8egt8qt73wer9wyej938r87");
 
     return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
 
