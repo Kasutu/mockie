@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -42,7 +42,7 @@ public class UserController {
     UserDisplayable user = new UserDisplayable(result, username);
 
     MultiValueMap<String, String> headers = new HttpHeaders();
-    headers.set("session", "ab8egt8qt73wer9wyej938r87");
+    headers.add("Set-Cookie", "platform=mobile; Max-Age=604800; Path=/; Secure; HttpOnly");
 
     return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
 
