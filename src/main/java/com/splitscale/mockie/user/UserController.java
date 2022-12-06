@@ -41,8 +41,11 @@ public class UserController {
 
     UserDisplayable user = new UserDisplayable(result, username);
 
+    String sessionID = "hwieg83764giuwef874ty3g5908";
+    String cookieValue = "sessionID=" + sessionID + "; Max-Age=604800; Path=/; Secure; HttpOnly";
+
     MultiValueMap<String, String> headers = new HttpHeaders();
-    headers.add("Set-Cookie", "platform=mobile; Max-Age=604800; Path=/; Secure; HttpOnly");
+    headers.add("Set-Cookie", cookieValue);
 
     return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
 
