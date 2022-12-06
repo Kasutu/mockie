@@ -36,15 +36,16 @@ public class UserController {
     String password = body.get("password");
 
     if (username == null || password == null) {
-      UserDisplayable user = new UserDisplayable(result, username);
-
-      MultiValueMap<String, String> headers = new HttpHeaders();
-      headers.add("session", "ab8egt8qt73wer9wyej938r87");
-
-      return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
+      return new ResponseEntity<UserDisplayable>(HttpStatus.BAD_REQUEST);
     }
 
-    return new ResponseEntity<UserDisplayable>(HttpStatus.BAD_REQUEST);
+    UserDisplayable user = new UserDisplayable(result, username);
+
+    MultiValueMap<String, String> headers = new HttpHeaders();
+    headers.add("session", "ab8egt8qt73wer9wyej938r87");
+
+    return new ResponseEntity<UserDisplayable>(user, headers, HttpStatus.OK);
+
   }
 
   @ResponseBody
