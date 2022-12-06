@@ -1,5 +1,17 @@
 # Usage Guideline
 
+**Clone the repo**
+
+```
+  git clone https://github.com/splitscale/mockie.git
+```
+
+**Run the server**
+
+```
+  mvn clean install && java -jar ./target/mockie-0.0.1-SNAPSHOT.jar
+```
+
 ### Javascript interface
 
 - POST method payload
@@ -38,8 +50,8 @@ Body
 
 Correct username is: `stevenBallaret`
 
-  - Request body: none
-  - Response body: `UserDisplayable`
+- Request body: none
+- Response body: `UserDisplayable`
 
 - `/api/user/update`
 
