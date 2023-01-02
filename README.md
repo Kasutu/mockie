@@ -2,7 +2,7 @@
 
 should work
 
-**Clone the Repository!**
+**Clone the Repository**
 
 ```
   git clone https://github.com/splitscale/mockie.git
