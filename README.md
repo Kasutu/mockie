@@ -29,7 +29,7 @@ Body
   }
 ```
 
-- GET method payload!
+- GET method payload
   **Object you will get**
 
 Body
@@ -41,7 +41,7 @@ Body
   }
 ```
 
-### Endpoints
+### Endpoints :)
 
 - `/api/user/create`
 
