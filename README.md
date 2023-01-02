@@ -10,11 +10,13 @@
 
 ```
   mvn clean install && java -jar ./target/mockie-0.0.1-SNAPSHOT.jar
+  
 ```
 
 ### Javascript interface
 
 - POST method payload
+
   **Object you need to send**
 
 Body
