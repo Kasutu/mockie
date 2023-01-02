@@ -1,4 +1,4 @@
-# Usage Guideline!
+# Usage Guideline
 
 **Clone the repo**
 
@@ -29,7 +29,7 @@ Body
   }
 ```
 
-- GET method payload
+- GET method payload!
   **Object you will get**
 
 Body
