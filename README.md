@@ -41,7 +41,7 @@ Body
   }
 ```
 
-### Endpoints :)
+### Endpoints
 
 - `/api/user/create`
 
