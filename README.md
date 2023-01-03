@@ -14,7 +14,7 @@ should work
   mvn clean install && java -jar ./target/mockie-0.0.1-SNAPSHOT.jar
 ```
 
-### Javascript interface
+### Javascript interface :)
 
 - POST method payload
 
