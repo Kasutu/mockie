@@ -1,11 +1,9 @@
-
+def runServer() {
+  sh "docker run --name mockie -p 32615:32615 -d splitscale/mockie:latest"
+}
 
 pipeline {
     agent any
-
-    def runServer() {
-        sh "docker run --name mockie -p 32615:32615 -d splitscale/mockie:latest"
-    }
 
     tools {
         maven 'Maven'
