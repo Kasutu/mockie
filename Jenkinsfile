@@ -62,4 +62,14 @@ pipeline {
 
     }
 
+  post {
+    success {
+      discordSend description: '', footer: '', image: '', link: 'env.BUILD_URL', result: 'SUCCESS', scmWebUrl: '', thumbnail: '', title: 'env.JOB_NAME', webhookURL: 'https://discord.com/api/webhooks/1059711519614586951/8lCddrpt1tbrX3i2BEhSylsRA6n0prSXOcEPetd9lGS4O15pQW7xPpGFmhLkSm98Rej2'
+    }
+
+    failure {
+      discordSend description: '', footer: '', image: '', link: 'env.BUILD_URL', result: 'FAILURE', scmWebUrl: '', thumbnail: '', title: 'env.JOB_NAME', webhookURL: 'https://discord.com/api/webhooks/1059711519614586951/8lCddrpt1tbrX3i2BEhSylsRA6n0prSXOcEPetd9lGS4O15pQW7xPpGFmhLkSm98Rej2'
+    }
+  }
+
 }
