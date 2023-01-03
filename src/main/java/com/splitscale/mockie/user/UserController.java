@@ -22,6 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/user")
 public class UserController {
+  
+  @ResponseBody
+  @GetMapping(path = "/")
+  public ResponseEntity<UserDisplayable> getUser() {
+
+    UserDisplayable user = new UserDisplayable(3423, "stevenBallaret");
+    return new ResponseEntity<UserDisplayable>(user, HttpStatus.OK);
+  }
 
   @ResponseBody
   @PostMapping(path = "/create")
