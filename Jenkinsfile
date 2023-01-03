@@ -37,8 +37,22 @@ pipeline {
     }
 	  
     stage('deploy') {
+       def runServer() {  
+         sh "docker run --name mockie -p 32615:32615 -d splitscale/mockie:latest"
+       }
+	    
        steps {
-         sh "docker run --rm --name mockie -p 32615:32615 -d splitscale/mockie:latest"
+	 script {
+		 
+	  try {
+	    runServer()
+	  } catch (Exception e) {
+	    sh "docker stop mockie"
+	    sh "docker rm mockie"
+            runServer()
+	  }
+		 
+	}
       }
     }
 	  
