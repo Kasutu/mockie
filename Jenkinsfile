@@ -38,7 +38,7 @@ pipeline {
 	  
     stage('deploy') {
        steps {
-         sh "docker run run --name mockie -p 32615:32615 -d splitscale/mockie:latest"
+         sh "docker run --name mockie -p 32615:32615 -d splitscale/mockie:latest"
       }
     }
 	  
