@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('initialize') {
       steps {
+        sh '${GITHUB_BRANCH}'
         sh 'mvn -v'
         sh 'java -version'
         sh 'git --version'
