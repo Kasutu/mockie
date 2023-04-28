@@ -75,6 +75,15 @@ public class UserController {
   }
 
   @ResponseBody
+  @GetMapping
+  public ResponseEntity<UserDisplayable> getCurrentUser() {
+
+    UserDisplayable user = new UserDisplayable(3423, "stevenBallaret");
+
+    return new ResponseEntity<UserDisplayable>(user, HttpStatus.OK);
+  }
+
+  @ResponseBody
   @PutMapping(path = "/update")
   public ResponseEntity<String> updateUser(@RequestBody Map<String, String> body) {
     String username = body.get("username");
