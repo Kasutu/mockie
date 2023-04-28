@@ -69,6 +69,19 @@ pipeline {
             }
           }
         }
+
+        stage('cleanup') {
+          steps {
+            sh 'mvn clean'
+          }
+        }
+
+        stage('clean-docker') {
+            steps {
+                sh 'docker system prune -af'
+            }
+        }
+        
     }
 }
 
