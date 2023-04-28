@@ -47,7 +47,7 @@ pipeline {
     stage('upload to docker hub') {
       steps {
         script {
-          withCredentials([usernamePassword(credentialsId: 'docker-pwd', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+          withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             sh "docker login -u ${USERNAME} -p ${PASSWORD}"
           }
 
