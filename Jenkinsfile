@@ -1,6 +1,3 @@
-def runServer() {
-  sh 'docker run --name mockie -p 32615:32615 -d splitscale/mockie:latest'
-}
 
 pipeline {
     agent any
@@ -25,6 +22,14 @@ pipeline {
       }
         }
 
+        stage('test') {
+      steps {
+        script {
+          sh 'mvn clean test'
+        }
+      }
+        }
+
         stage('install') {
       steps {
         script {
@@ -35,22 +40,38 @@ pipeline {
 
         stage('build docker image') {
       steps {
-        sh 'docker build -t splitscale/mockie:latest .'
+        sh 'docker build -t kasutu/mockie:latest .'
       }
         }
+
+    stage('upload to docker hub') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker-pwd', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+          }
+
+          sh 'docker push kasutu/mockie:latest'
+        }
+      }
+    }
 
         stage('deploy') {
           steps {
             script {
               try {
-                runServer()
+            runServer()
                         } catch (Exception e) {
-                sh 'docker stop mockie'
-                sh 'docker rm mockie'
-                runServer()
+            sh 'docker stop mockie'
+            sh 'docker rm mockie'
+            runServer()
               }
             }
           }
         }
     }
+}
+
+def runServer() {
+  sh 'docker run --name mockie -p 5050:8080 -d kasutu/mockie:latest'
 }
