@@ -115,7 +115,7 @@ public class LoggingFilter implements Filter {
 
       // Build log message
       Map<String, Object> logMessage = new HashMap<>();
-      logMessage.put("filter", logger.getName());
+      logMessage.put("filter", logger.getClass().getName());
       logMessage.put("level", "INFO");
       logMessage.put("method", httpRequest.getMethod());
       logMessage.put("uri", httpRequest.getRequestURI());
@@ -142,7 +142,7 @@ public class LoggingFilter implements Filter {
       if (e != null) {
         // Build error message
         Map<String, Object> errorMessage = new HashMap<>();
-        errorMessage.put("filter", logger.getName());
+        errorMessage.put("filter", logger.getClass().getName());
         errorMessage.put("level", "ERROR");
         errorMessage.put("uri", httpRequest.getRequestURI());
         errorMessage.put("message", e.getMessage());
