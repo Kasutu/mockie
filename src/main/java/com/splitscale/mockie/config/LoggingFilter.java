@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,13 +32,20 @@ import jakarta.servlet.http.HttpServletResponseWrapper;
 public class LoggingFilter implements Filter {
 
   private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+  Map<String, Object> requestHeaders = new HashMap<>();
+  Map<String, Object> responseHeaders = new HashMap<>();
+
+  HttpServletRequest httpRequest;
+
+  String requestPayload;
+  String responsePayload;
 
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
     try {
-      HttpServletRequest httpRequest = (HttpServletRequest) request;
+      httpRequest = (HttpServletRequest) request;
 
       ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
-      String requestPayload = getContentAsString(requestWrapper.getContentAsByteArray(),
+      requestPayload = getContentAsString(requestWrapper.getContentAsByteArray(),
           requestWrapper.getCharacterEncoding());
 
       class CustomResponseWrapper extends HttpServletResponseWrapper {
@@ -86,17 +95,34 @@ public class LoggingFilter implements Filter {
       CustomResponseWrapper responseWrapper = new CustomResponseWrapper((HttpServletResponse) response);
       chain.doFilter(requestWrapper, responseWrapper);
 
-      String responsePayload = getContentAsString(responseWrapper.getResponseAsByteArray(),
+      responsePayload = getContentAsString(responseWrapper.getResponseAsByteArray(),
           responseWrapper.getCharacterEncoding());
+
+      // Log request headers
+      Enumeration<String> requestHeaderNames = httpRequest.getHeaderNames();
+      while (requestHeaderNames.hasMoreElements()) {
+        String headerName = requestHeaderNames.nextElement();
+        String headerValue = httpRequest.getHeader(headerName);
+        requestHeaders.put(headerName, headerValue);
+      }
+
+      // Log response headers
+      Collection<String> responseHeaderNames = responseWrapper.getHeaderNames();
+      for (String headerName : responseHeaderNames) {
+        String headerValue = responseWrapper.getHeader(headerName);
+        responseHeaders.put(headerName, headerValue);
+      }
 
       // Build log message
       Map<String, Object> logMessage = new HashMap<>();
       logMessage.put("filter", logger.getName());
-      logMessage.put("level", "ERROR");
+      logMessage.put("level", "INFO");
       logMessage.put("method", httpRequest.getMethod());
       logMessage.put("uri", httpRequest.getRequestURI());
       logMessage.put("status", responseWrapper.getStatus());
+      logMessage.put("requestHeaders", requestHeaders);
       logMessage.put("requestPayload", requestPayload);
+      logMessage.put("responseHeaders", responseHeaders);
       logMessage.put("responsePayload", responsePayload);
 
       String logJson = new ObjectMapper().writeValueAsString(logMessage);
@@ -105,18 +131,25 @@ public class LoggingFilter implements Filter {
       Loglemon.sendLog(logJson);
 
     } catch (Exception e) {
-      handleException(e);
+      handleException(e, requestHeaders, responseHeaders, requestPayload, responsePayload);
     }
   }
 
-  private void handleException(Exception e) {
+  private void handleException(Exception e, Map<String, Object> requestHeaders2, Map<String, Object> responseHeaders2,
+      String requestPayload,
+      String responsePayload) {
     try {
       if (e != null) {
         // Build error message
         Map<String, Object> errorMessage = new HashMap<>();
         errorMessage.put("filter", logger.getName());
         errorMessage.put("level", "ERROR");
+        errorMessage.put("uri", httpRequest.getRequestURI());
         errorMessage.put("message", e.getMessage());
+        errorMessage.put("requestHeaders", requestHeaders2);
+        errorMessage.put("requestPayload", requestPayload);
+        errorMessage.put("responseHeaders", responseHeaders2);
+        errorMessage.put("responsePayload", responsePayload);
 
         String errorJson = new ObjectMapper().writeValueAsString(errorMessage);
 
