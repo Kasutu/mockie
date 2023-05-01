@@ -1,4 +1,4 @@
-package com.splitscale.mockie.user;
+package com.splitscale.mockie.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -7,11 +7,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
-public class UserConfig extends WebMvcConfigurationSupport {
+public class InterceptorConfig extends WebMvcConfigurationSupport {
 
   private HandlerInterceptor interceptor;
 
-  public UserConfig(HandlerInterceptor interceptor) {
+  public InterceptorConfig(HandlerInterceptor interceptor) {
     this.interceptor = interceptor;
   }
 
