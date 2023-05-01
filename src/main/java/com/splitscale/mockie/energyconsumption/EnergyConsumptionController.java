@@ -22,7 +22,7 @@ public class EnergyConsumptionController {
     return new ResponseEntity<>(energyConsumptionMap, HttpStatus.OK);
   }
 
-  @PostMapping("/add")
+  @PostMapping
   public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody Map<String, Object> energyConsumptionMap) {
     String id = (String) energyConsumptionMap.get("id");
     String energyConsumption = (String) energyConsumptionMap.get("energyConsumption");
@@ -35,7 +35,7 @@ public class EnergyConsumptionController {
     return new ResponseEntity<>(newEnergyConsumption, HttpStatus.CREATED);
   }
 
-  @PutMapping("/edit/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<EnergyConsumption> editEnergyConsumption(
       @PathVariable("id") String id, @RequestBody EnergyConsumption energyConsumption) {
     EnergyConsumption oldEnergyConsumption = energyConsumptionMap.get(id);
@@ -49,7 +49,7 @@ public class EnergyConsumptionController {
     return new ResponseEntity<>(oldEnergyConsumption, HttpStatus.OK);
   }
 
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> deleteEnergyConsumption(@PathVariable("id") String id) {
     EnergyConsumption energyConsumption = energyConsumptionMap.remove(id);
     if (energyConsumption == null) {
@@ -58,7 +58,7 @@ public class EnergyConsumptionController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping("/read/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<EnergyConsumption> readEnergyConsumption(@PathVariable("id") String id) {
     EnergyConsumption energyConsumption = energyConsumptionMap.get(id);
     if (energyConsumption == null) {
