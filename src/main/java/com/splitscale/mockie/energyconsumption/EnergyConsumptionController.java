@@ -16,15 +16,15 @@ public class EnergyConsumptionController {
 
   @GetMapping
   public ResponseEntity<List<EnergyConsumption>> readEnergyConsumption() {
-    Loglemon.sendLog("Inside readEnergyConsumption() method.");
-    List<EnergyConsumption> energyConsumptions = EnergyConsumptionDatabase.getAllEnergyConsumptions();
-    Loglemon.sendLog("Number of energy consumptions retrieved: " + energyConsumptions.size());
-    return new ResponseEntity<List<EnergyConsumption>>(energyConsumptions, HttpStatus.OK);
+    Loglemon.sendLog("{\"msg\": \"readEnergyConsumption() called.\"}");
+    List<EnergyConsumption> allEnergyConsumptions = EnergyConsumptionDatabase.getAllEnergyConsumptions();
+    Loglemon.sendLog("{\"msg\": \"Returning all energy consumptions.\"}");
+    return new ResponseEntity<List<EnergyConsumption>>(allEnergyConsumptions, HttpStatus.OK);
   }
 
   @PostMapping
   public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody Map<String, Object> energyConsumptionMap) {
-    Loglemon.sendLog("Inside addEnergyConsumption() method.");
+    Loglemon.sendLog("{\"msg\": \"addEnergyConsumption() called.\"}");
     String id = (String) energyConsumptionMap.get("id");
     String energyConsumption = (String) energyConsumptionMap.get("energyConsumption");
     String description = (String) energyConsumptionMap.get("description");
@@ -33,7 +33,7 @@ public class EnergyConsumptionController {
     EnergyConsumption newEnergyConsumption = new EnergyConsumption(id, energyConsumption, description, importance);
     EnergyConsumptionDatabase.addEnergyConsumption(newEnergyConsumption);
 
-    Loglemon.sendLog("New energy consumption added: " + newEnergyConsumption.toString());
+    Loglemon.sendLog("{\"msg\": \"New energy consumption added with ID: " + id + "\"}");
     return new ResponseEntity<>(newEnergyConsumption, HttpStatus.CREATED);
   }
 
