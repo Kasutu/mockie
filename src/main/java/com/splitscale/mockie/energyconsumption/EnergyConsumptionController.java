@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.splitscale.Loglemon;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/energy/consumption")
@@ -14,12 +16,15 @@ public class EnergyConsumptionController {
 
   @GetMapping
   public ResponseEntity<List<EnergyConsumption>> readEnergyConsumption() {
-    return new ResponseEntity<List<EnergyConsumption>>(EnergyConsumptionDatabase.getAllEnergyConsumptions(),
-        HttpStatus.OK);
+    Loglemon.sendLog("Inside readEnergyConsumption() method.");
+    List<EnergyConsumption> energyConsumptions = EnergyConsumptionDatabase.getAllEnergyConsumptions();
+    Loglemon.sendLog("Number of energy consumptions retrieved: " + energyConsumptions.size());
+    return new ResponseEntity<List<EnergyConsumption>>(energyConsumptions, HttpStatus.OK);
   }
 
   @PostMapping
   public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody Map<String, Object> energyConsumptionMap) {
+    Loglemon.sendLog("Inside addEnergyConsumption() method.");
     String id = (String) energyConsumptionMap.get("id");
     String energyConsumption = (String) energyConsumptionMap.get("energyConsumption");
     String description = (String) energyConsumptionMap.get("description");
@@ -28,6 +33,7 @@ public class EnergyConsumptionController {
     EnergyConsumption newEnergyConsumption = new EnergyConsumption(id, energyConsumption, description, importance);
     EnergyConsumptionDatabase.addEnergyConsumption(newEnergyConsumption);
 
+    Loglemon.sendLog("New energy consumption added: " + newEnergyConsumption.toString());
     return new ResponseEntity<>(newEnergyConsumption, HttpStatus.CREATED);
   }
 
