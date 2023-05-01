@@ -1,10 +1,7 @@
 package com.splitscale.mockie.energyconsumption;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/energy/consumption")
 public class EnergyConsumptionController {
 
-  private final Map<String, EnergyConsumption> energyConsumptionMap = new HashMap<>();
-
   @GetMapping
   public ResponseEntity<Map<String, EnergyConsumption>> readEnergyConsumption() {
-    return new ResponseEntity<>(energyConsumptionMap, HttpStatus.OK);
+    return new ResponseEntity<>(EnergyConsumptionDatabase.getAllEnergyConsumptions(), HttpStatus.OK);
   }
 
   @PostMapping
@@ -30,7 +25,7 @@ public class EnergyConsumptionController {
     String importance = (String) energyConsumptionMap.get("importance");
 
     EnergyConsumption newEnergyConsumption = new EnergyConsumption(id, energyConsumption, description, importance);
-    energyConsumptionMap.put(id, newEnergyConsumption);
+    EnergyConsumptionDatabase.addEnergyConsumption(newEnergyConsumption);
 
     return new ResponseEntity<>(newEnergyConsumption, HttpStatus.CREATED);
   }
@@ -38,21 +33,21 @@ public class EnergyConsumptionController {
   @PutMapping("/{id}")
   public ResponseEntity<EnergyConsumption> editEnergyConsumption(
       @PathVariable("id") String id, @RequestBody EnergyConsumption energyConsumption) {
-    EnergyConsumption oldEnergyConsumption = energyConsumptionMap.get(id);
+    EnergyConsumption oldEnergyConsumption = EnergyConsumptionDatabase.getEnergyConsumption(id);
     if (oldEnergyConsumption == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     oldEnergyConsumption.setEnergyConsumption(energyConsumption.getEnergyConsumption());
     oldEnergyConsumption.setDescription(energyConsumption.getDescription());
     oldEnergyConsumption.setImportance(energyConsumption.getImportance());
-    energyConsumptionMap.put(id, oldEnergyConsumption);
+    EnergyConsumptionDatabase.editEnergyConsumption(id, oldEnergyConsumption);
     return new ResponseEntity<>(oldEnergyConsumption, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> deleteEnergyConsumption(@PathVariable("id") String id) {
-    EnergyConsumption energyConsumption = energyConsumptionMap.remove(id);
-    if (energyConsumption == null) {
+    boolean isDeleted = EnergyConsumptionDatabase.deleteEnergyConsumption(id);
+    if (!isDeleted) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -60,7 +55,7 @@ public class EnergyConsumptionController {
 
   @GetMapping("/{id}")
   public ResponseEntity<EnergyConsumption> readEnergyConsumption(@PathVariable("id") String id) {
-    EnergyConsumption energyConsumption = energyConsumptionMap.get(id);
+    EnergyConsumption energyConsumption = EnergyConsumptionDatabase.getEnergyConsumption(id);
     if (energyConsumption == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -70,22 +65,14 @@ public class EnergyConsumptionController {
   @GetMapping("/filter/{importance}")
   public ResponseEntity<List<EnergyConsumption>> filterEnergyConsumptions(
       @PathVariable("importance") String importance) {
-    List<EnergyConsumption> filteredEnergyConsumptions = energyConsumptionMap.values().stream()
-        .filter(e -> e.getImportance().equals(importance)).collect(Collectors.toList());
+    List<EnergyConsumption> filteredEnergyConsumptions = EnergyConsumptionDatabase
+        .filterEnergyConsumptionsByImportance(importance);
     return new ResponseEntity<>(filteredEnergyConsumptions, HttpStatus.OK);
   }
 
   @GetMapping("/search/{query}")
   public ResponseEntity<List<EnergyConsumption>> searchEnergyConsumptions(@PathVariable("query") String query) {
-    List<EnergyConsumption> matchingEnergyConsumptions = new ArrayList<>();
-    for (EnergyConsumption energyConsumption : energyConsumptionMap.values()) {
-      if (energyConsumption.getId().contains(query) || energyConsumption.getEnergyConsumption().contains(query)
-          || energyConsumption.getDescription().contains(query)
-          || energyConsumption.getImportance().contains(query)) {
-        matchingEnergyConsumptions.add(energyConsumption);
-      }
-    }
+    List<EnergyConsumption> matchingEnergyConsumptions = EnergyConsumptionDatabase.searchEnergyConsumptions(query);
     return new ResponseEntity<>(matchingEnergyConsumptions, HttpStatus.OK);
   }
-
 }
