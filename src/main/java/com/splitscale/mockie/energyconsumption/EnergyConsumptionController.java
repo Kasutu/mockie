@@ -23,9 +23,16 @@ public class EnergyConsumptionController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody EnergyConsumption energyConsumption) {
-    energyConsumptionMap.put(energyConsumption.getId(), energyConsumption);
-    return new ResponseEntity<>(energyConsumption, HttpStatus.CREATED);
+  public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody Map<String, Object> energyConsumptionMap) {
+    String id = (String) energyConsumptionMap.get("id");
+    String energyConsumption = (String) energyConsumptionMap.get("energyConsumption");
+    String description = (String) energyConsumptionMap.get("description");
+    String importance = (String) energyConsumptionMap.get("importance");
+
+    EnergyConsumption newEnergyConsumption = new EnergyConsumption(id, energyConsumption, description, importance);
+    energyConsumptionMap.put(id, newEnergyConsumption);
+
+    return new ResponseEntity<>(newEnergyConsumption, HttpStatus.CREATED);
   }
 
   @PutMapping("/edit/{id}")
