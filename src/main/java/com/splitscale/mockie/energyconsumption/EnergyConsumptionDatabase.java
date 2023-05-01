@@ -37,8 +37,8 @@ public final class EnergyConsumptionDatabase {
     return ENERGY_CONSUMPTION_MAP.get(id);
   }
 
-  public static Map<String, EnergyConsumption> getAllEnergyConsumptions() {
-    return ENERGY_CONSUMPTION_MAP;
+  public static List<EnergyConsumption> getAllEnergyConsumptions() {
+    return new ArrayList<EnergyConsumption>(ENERGY_CONSUMPTION_MAP.values());
   }
 
   public static List<EnergyConsumption> filterEnergyConsumptionsByImportance(String importance) {

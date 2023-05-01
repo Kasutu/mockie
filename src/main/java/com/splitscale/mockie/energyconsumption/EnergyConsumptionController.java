@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class EnergyConsumptionController {
 
   @GetMapping
-  public ResponseEntity<Map<String, EnergyConsumption>> readEnergyConsumption() {
-    return new ResponseEntity<>(EnergyConsumptionDatabase.getAllEnergyConsumptions(), HttpStatus.OK);
+  public ResponseEntity<List<EnergyConsumption>> readEnergyConsumption() {
+    return new ResponseEntity<List<EnergyConsumption>>(EnergyConsumptionDatabase.getAllEnergyConsumptions(),
+        HttpStatus.OK);
   }
 
   @PostMapping
