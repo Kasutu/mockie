@@ -17,6 +17,11 @@ public class EnergyConsumptionController {
 
   private final Map<String, EnergyConsumption> energyConsumptionMap = new HashMap<>();
 
+  @GetMapping
+  public ResponseEntity<Map<String, EnergyConsumption>> readEnergyConsumption() {
+    return new ResponseEntity<>(energyConsumptionMap, HttpStatus.OK);
+  }
+
   @PostMapping("/add")
   public ResponseEntity<EnergyConsumption> addEnergyConsumption(@RequestBody EnergyConsumption energyConsumption) {
     energyConsumptionMap.put(energyConsumption.getId(), energyConsumption);
